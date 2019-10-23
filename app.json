@@ -1,0 +1,35 @@
+{
+  "expo": {
+    "name": "doorzy Heroes",
+    "slug": "doorzyHeroes",
+    "privacy": "public",
+    "sdkVersion": "34.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#6f38a5"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 30000
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "android": {
+      "package": "com.doorzy.doorzyHeroes",
+      "versionCode" : 1,
+      "permissions" : []
+    },
+    "ios": {
+      "supportsTablet": true
+    }
+  }
+}
