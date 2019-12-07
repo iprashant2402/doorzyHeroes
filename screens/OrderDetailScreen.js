@@ -33,10 +33,12 @@ class OrderDetailScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      order: {},
-      showIndicator: true,
-      user: {},
+      order : {},
+      showIndicator : true,
+      user : {},
+      Desc :'',
       packingCharge : 0,
+      surgeFees : 0,
       updateStatusIndicator : false,
       generateBillIndicator : false,
       completeIndicator : false
@@ -105,7 +107,7 @@ class OrderDetailScreen extends React.Component {
       return delivery;
     }else{
       if(this.getCurrentTime() >= 23 || this.getCurrentTime() < 9){
-        return 5;
+        return 19;
       }
       if(total<100){
         return 25;
@@ -125,7 +127,7 @@ class OrderDetailScreen extends React.Component {
   updateTotal = (total) => {
     let order = {...this.state.order};
     const deliveryRate = this.deliveryCharge(total);
-    order.total = total + deliveryRate + this.state.packingCharge;
+    order.total = total + deliveryRate + this.state.packingCharge + this.state.surgeFees;
     this.setState({
       order : order
     });
@@ -145,11 +147,15 @@ class OrderDetailScreen extends React.Component {
       await this.updateTotal(total);
       const products = this.state.order.products;
       const grandTotal = this.state.order.total;
-      const packingCharge = this.state.packingCharge
+      const packingCharge = this.state.packingCharge;
+      const surgeFees = this.state.surgeFees;
+      const Desc = this.state.Desc;
       ordersRef.update({
         products : products,
         total : grandTotal,
-        packingCharge : packingCharge
+        packingCharge : packingCharge,
+        surgeFees : surgeFees,
+        Desc : Desc,
       }).then(function(){
         thisRef.setState({
           generateBillIndicator : false
@@ -370,10 +376,27 @@ class OrderDetailScreen extends React.Component {
           <View style={styles.timeWrapper}>{productList}</View>
           <View style={styles.timeWrapper}>
           <TextInput
+              onChangeText={txt => this.setState({Desc : txt})}
+              value={this.state.Desc}
+              placeholder="Description"
+              style={styles.productDesc}
+            />
+          </View>
+          <View style={styles.timeWrapper}>
+          <TextInput
               onChangeText={txt => this.setState({packingCharge : parseInt(txt)})}
               value={this.state.packingCharge}
               keyboardType="numeric"
               placeholder="PACKING CHARGE IN INR"
+              style={styles.productPrice}
+            />
+          </View>
+          <View style={styles.timeWrapper}>
+          <TextInput
+              onChangeText={txt => this.setState({surgeFees : parseInt(txt)})}
+              value={this.state.surgeFees}
+              keyboardType="numeric"
+              placeholder="SURGE FEESS IN INR"
               style={styles.productPrice}
             />
           </View>
@@ -441,6 +464,12 @@ const styles = StyleSheet.create({
     padding: 5,
     borderColor: colors.greyBorder,
     borderWidth: 1
+  },
+  productDesc: {
+    padding: 5,
+    borderColor: colors.greyBorder,
+    borderWidth: 1,
+    height: 100 
   },
   productItemWrapper: {
     flex: 1,
