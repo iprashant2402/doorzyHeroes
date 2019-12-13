@@ -158,7 +158,7 @@ class OrderDetailScreen extends React.Component {
         packingCharge : packingCharge,
         surgeFees : surgeFees,
         Desc : Desc,
-        exceptedTime : exceptedTime,
+        expectedTime : expectedTime,
       }).then(function(){
         thisRef.setState({
           generateBillIndicator : false
