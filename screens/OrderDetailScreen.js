@@ -46,6 +46,22 @@ class OrderDetailScreen extends React.Component {
     };
   }
 
+  postData = async (url, data) => {
+    // Default options are marked with *
+    const response = await fetch(url, {
+      method: "POST", // *GET, POST, PUT, DELETE, etc.
+      mode: "cors", // no-cors, *cors, same-origin
+      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+      headers: {
+        "Content-Type": "application/json"
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      referrer: "no-referrer", // no-referrer, *client
+      body: JSON.stringify(data) // body data type must match "Content-Type" header
+    });
+    return await response.json(); // parses JSON response into native JavaScript objects
+  };
+
   getNotifDate = timestamp => {
     var d = new Date(timestamp);
     if (d.getHours() >= 12)
@@ -172,10 +188,17 @@ class OrderDetailScreen extends React.Component {
     this.setState({
       updateStatusIndicator : true
     });
+    var tokens = [];
+    tokens.push(this.state.user.pushToken);
+    const url = "https://powerful-wave-93367.herokuapp.com/selectedUsers";
     const thisRef = this;
     const content = "Your order with Order # "+this.state.order.oid+" has been "+this.state.order.statusCode+".";
     const title = "Order "+this.state.order.statusCode;
-    console.log(title);
+    const data = {
+      tokens: tokens,
+      title: title,
+      content: content
+    };
     const ordersRef = firebase.firestore().collection('orders').doc(this.state.order.oid);
     const statusCode = this.state.order.statusCode;
     ordersRef.update({
@@ -184,6 +207,9 @@ class OrderDetailScreen extends React.Component {
       thisRef.setState({
         updateStatusIndicator : false
       });
+      if(thisRef.postData(url, data)){
+        console.log("Push Notification sent regarding status update.");
+      }
       sendNotification(thisRef.state.order.uid,content,title);
     }).catch(err=>console.log(err));
   }
