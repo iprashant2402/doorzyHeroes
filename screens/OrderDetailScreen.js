@@ -39,7 +39,7 @@ class OrderDetailScreen extends React.Component {
       Desc :'',
       packingCharge : 0,
       surgeFees : 0,
-      exceptedTime : 0,
+      expectedTime : 0,
       updateStatusIndicator : false,
       generateBillIndicator : false,
       completeIndicator : false
@@ -167,14 +167,14 @@ class OrderDetailScreen extends React.Component {
       const packingCharge = this.state.packingCharge;
       const surgeFees = this.state.surgeFees;
       const Desc = this.state.Desc;
-      const exceptedTime = this.state.exceptedTime;
+      const expectedTime = this.state.expectedTime;
       ordersRef.update({
         products : products,
         total : grandTotal,
         packingCharge : packingCharge,
         surgeFees : surgeFees,
         Desc : Desc,
-        exceptedTime : exceptedTime,
+        expectedTime : expectedTime,
       }).then(function(){
         thisRef.setState({
           generateBillIndicator : false
@@ -431,10 +431,10 @@ class OrderDetailScreen extends React.Component {
           </View>
           <View style={styles.timeWrapper}>
           <TextInput
-              onChangeText={txt => this.setState({exceptedTime : parseInt(txt)})}
-              value={this.state.exceptedTime}
+              onChangeText={txt => this.setState({expectedTime : parseInt(txt)})}
+              value={this.state.expectedTime}
               keyboardType="numeric"
-              placeholder="Enter Excepted Time for Delivery (in mins)"
+              placeholder="Enter Expected Time for Delivery (in mins)"
               style={styles.productPrice}
             />
           </View>
