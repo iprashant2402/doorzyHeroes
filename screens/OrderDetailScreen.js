@@ -277,25 +277,51 @@ class OrderDetailScreen extends React.Component {
   }
 
   markComplete = () => {
+    var flag_amount = true;
     this.setState({
       completeIndicator : true
     });
-    const thisRef = this;
-    const ordersRef = firebase.firestore().collection('orders').doc(this.state.order.oid);
-    ordersRef.update({
-      active : false,
-      paymentRecieved : true
-    }).then(()=>{
-      let order = {...thisRef.state.order};
-      order.active = false;
-      order.paymentRecieved = true;
-      thisRef.setState({
-        order : order,
-        completeIndicator : false
-      });
-      alert("ORDER MARKED AS COMPLETED");
-      this.incrementOrderCount();
-    }).catch(err=>console.log(err));
+    for(var i=0;i<this.state.order.products.length;i++)
+    {
+      if(!this.state.order.products[i].amount)
+        flag_amount = false;
+    }
+    if(this.state.order.statusCode == "delivered" || this.state.order.statusCode == "cancelled")
+    {
+      if(flag_amount)
+      {
+        const thisRef = this;
+        const ordersRef = firebase.firestore().collection('orders').doc(this.state.order.oid);
+        ordersRef.update({
+          active : false,
+          paymentRecieved : true
+        }).then(()=>{
+          let order = {...thisRef.state.order};
+          order.active = false;
+          order.paymentRecieved = true;
+          thisRef.setState({
+            order : order,
+            completeIndicator : false
+          });
+          alert("ORDER MARKED AS COMPLETED");
+          this.incrementOrderCount();
+        }).catch(err=>console.log(err));
+      }
+      else
+      {  
+        alert("One or more products have invalid or no amount.");
+        this.setState({
+            completeIndicator : false
+          });
+      }
+    }
+    else
+    {  
+      alert("Please update status to Delivered or Cancelled.");
+      this.setState({
+            completeIndicator : false
+          });
+    }
   }
 
   render() {
