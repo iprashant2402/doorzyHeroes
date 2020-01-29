@@ -396,6 +396,17 @@ class OrderDetailScreen extends React.Component {
     else {
       total = <Text/>;
     }
+    if (this.state.order.instruction) {
+    	instruction = (
+	    	<View style={styles.timeWrapper}>
+	          <Text style={styles.productName}>
+	            Instructions : {this.state.order.instruction}
+	          </Text>
+	        </View>
+        );
+    }
+    else
+    	instruction = <Text/>;
     return (
       <View style={styles.container}>
         <ScrollView
@@ -429,6 +440,7 @@ class OrderDetailScreen extends React.Component {
             <Text style={styles.orderTitle}>PRODUCTS</Text>
           </View>
           <View style={styles.timeWrapper}>{productList}</View>
+          {instruction}
           <View style={styles.timeWrapper}>
           <TextInput
               onChangeText={txt => this.setState({Desc : txt})}
