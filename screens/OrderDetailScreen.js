@@ -119,7 +119,7 @@ class OrderDetailScreen extends React.Component {
 
   deliveryCharge = (total) => {
     const days = this.getNumberOfDays(this.state.user.regTimestamp);
-    if(days<0){
+    if(days<6){
       const delivery = 0;
       return delivery;
     }else{
